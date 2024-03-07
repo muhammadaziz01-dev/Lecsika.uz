@@ -1,0 +1,9 @@
+.info-wrapp{
+    background-image: url(../aseets/imgs/Ellipse.png);
+    background-position:center;
+    background-repeat: no-repeat;
+    object-fit:scale-down;
+    height: 200px;
+    display: flex;
+    align-items: center;
+}
