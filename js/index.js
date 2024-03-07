@@ -33,10 +33,17 @@ async function getPsost(text) {
     try{
         let response = await fetch(`${besUrl}/entries/en/${text}`);
         let resalt =  await response.json();
-        renderInfo(resalt[0])
+        
+        if(Array.isArray(resalt)){
+            renderInfo(resalt)
+        }else{
+            infoEror(resalt);
+        }
+        // renderInfo(resalt)
+        
+        // infoEror(resalt);
     }catch(err){
-        // console.log(err);
-        infoEror(err);
+        console.log(err);
     }
 }
 
@@ -47,20 +54,23 @@ async function getPsost(text) {
 
 function renderInfo(data){
     infoWrap.innerHTML= "";
-   let cardInfo = render('div' , cardInfoCklassName , `
-   <h1 class="text-[28px] font-medium ">${data.word}</h1> 
-   <p class="text-[18px] font-normal text-gray-400 mt-2">${data.meanings[0].partOfSpeech} , ${data.meanings[1].partOfSpeech} , ${data.meanings[2].partOfSpeech}</p>
-   <p class="flex items-center gap-5 mt-2">
-   <audio src="${data.phonetics[0].audio}" controls class="mb-[15px]"></audio>
-     <span class="text-[18px] font-normal text-gray-400">${data.phonetics[2].text}</span>
-   </p>
-   <p class="mt-2">
-     <strong>hello girl</strong>
-     <span>${data.meanings[0].definitions[0].definition}</span>
-   </p>
-   <a href="${data.phonetics[0].sourceUrl}"class="text-[18px] font-normal mt-2 text-gray-400">Red mor..</a>
-   `)
-   infoWrap.appendChild(cardInfo);
+   if(data.length){
+    data.forEach((el) => {
+        let cardInfo = render('div' , cardInfoCklassName , `
+        <h1 class="text-[28px] font-medium ">${el.word}</h1> 
+        <p class="text-[18px] font-normal text-gray-400 mt-2">${el.meanings.map((val)=> val.partOfSpeech)}</p>
+        <p class="flex items-center gap-5 mt-2">
+        <audio src="${el.phonetics[0].audio}" controls class="mb-[15px]"></audio>
+          <span class="text-[18px] font-normal text-gray-400">${el.phonetics.map((el)=>el.text)}</span>
+        </p>
+        <p class="mt-2">
+          <span>${el.meanings.map((el)=>el.definitions.map((el)=>el.definition))}</span>
+        </p>
+        <a href="${el.phonetics[0].sourceUrl}"class="text-[18px] font-normal mt-2 text-gray-400">learn more..</a>
+        `)
+        infoWrap.appendChild(cardInfo);
+    });
+   }
 }
 
 
