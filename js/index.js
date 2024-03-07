@@ -35,8 +35,10 @@ async function getPsost(text) {
         let resalt =  await response.json();
         
         if(Array.isArray(resalt)){
+            infoWrap.innerHTML=`<span class="loader"></span>`
             renderInfo(resalt)
         }else{
+            infoWrap.innerHTML=`<span class="loader"></span>`
             infoEror(resalt);
         }
         // renderInfo(resalt)
@@ -60,7 +62,7 @@ function renderInfo(data){
         <h1 class="text-[28px] font-medium ">${el.word}</h1> 
         <p class="text-[18px] font-normal text-gray-400 mt-2">${el.meanings.map((val)=> val.partOfSpeech)}</p>
         <p class="flex items-center gap-5 mt-2">
-        <audio src="${el.phonetics[0].audio}" controls class="mb-[15px]"></audio>
+        <audio src="${el.phonetics.map((el)=>el.audio)}" controls class="mb-[15px]"></audio>
           <span class="text-[18px] font-normal text-gray-400">${el.phonetics.map((el)=>el.text)}</span>
         </p>
         <p class="mt-2">
